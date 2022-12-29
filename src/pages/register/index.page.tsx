@@ -2,9 +2,13 @@ import { useForm } from 'react-hook-form'
 import { ArrowRight } from 'phosphor-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-
 import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
 import { Container, Form, FormError, Header } from './styles'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+
+import { API } from '../../lib/axios'
+import { AxiosError } from 'axios'
 
 const registerFormSchema = z.object({
   username: z
@@ -25,13 +29,34 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<registerFormData>({
     resolver: zodResolver(registerFormSchema),
   })
 
+  const router = useRouter()
+
+  // Busca o username do usuário pelos query params
+  useEffect(() => {
+    if (router.query.username) {
+      setValue('username', String(router.query.username))
+    }
+  }, [router.query?.username, setValue])
+
   async function handleRegister(data: registerFormData) {
-    console.log(data)
+    try {
+      await API.post('/users', {
+        name: data.name,
+        username: data.username,
+      })
+    } catch (err) {
+      if (err instanceof AxiosError && err?.response?.data?.message) {
+        return alert(err.response.data.message)
+      }
+
+      console.error(err)
+    }
   }
 
   return (
@@ -55,7 +80,7 @@ export default function Register() {
             {...register('username')}
           />
 
-          {/* triggers a message if there is an error  */}
+          {/* Aciona uma mensagem se houver um erro  */}
           {errors.username && (
             <FormError size="sm">{errors.username.message}</FormError>
           )}
@@ -65,7 +90,7 @@ export default function Register() {
           <Text size="sm">Nome de completo</Text>
           <TextInput placeholder="Seu nome" {...register('name')} />
 
-          {/* triggers a message if there is an error  */}
+          {/* Aciona uma mensagem se houver um erro  */}
           {errors.name && (
             <FormError size="sm">{errors.name.message}</FormError>
           )}
