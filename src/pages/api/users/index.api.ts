@@ -1,7 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'nookies'
+import { z } from 'zod'
 
 import { prisma } from '../../../lib/prisma'
+
+const userBodySchema = z.object({
+  username: z.string().min(3),
+  name: z.string(),
+})
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +17,7 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  const { name, username } = req.body
+  const { name, username } = userBodySchema.parse(req.body)
 
   const userExists = await prisma.user.findUnique({
     where: {
@@ -20,8 +26,14 @@ export default async function handler(
   })
 
   if (userExists) {
+    setCookie({ res }, '@ignitecall:userId', userExists.id, {
+      maxAge: 60 * 60 * 24 * 7, // 7days
+
+      path: '/',
+    })
+
     return res.status(400).json({
-      message: 'User already taken.',
+      message: 'Usuário já cadastrado, conecte-se com o Google 🌎',
     })
   }
 
