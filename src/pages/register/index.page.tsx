@@ -6,9 +6,9 @@ import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
 import { Container, Form, FormError, Header } from './styles'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { AxiosError } from 'axios'
 
 import { API } from '../../lib/axios'
-import { AxiosError } from 'axios'
 
 const registerFormSchema = z.object({
   username: z
