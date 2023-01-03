@@ -1,3 +1,6 @@
+// Linguagem pt-BR global para todas as páginas
+import '../lib/dayjs'
+
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 
