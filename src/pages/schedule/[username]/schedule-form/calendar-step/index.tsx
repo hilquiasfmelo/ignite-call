@@ -37,6 +37,7 @@ export function CalendarStep() {
     ? dayjs(selectedDate).format('YYYY-MM-DD')
     : null
 
+  // Chamada a API
   const { data: availability } = useQuery<Availability>(
     ['availability', selectedDateWithoutTime],
     async () => {
