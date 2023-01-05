@@ -68,7 +68,7 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
       const response = await API.get(`/users/${username}/blocked-dates`, {
         params: {
           year: currentDate.get('year'),
-          month: String(currentDate.get('month')).padStart(1, '0') + 1,
+          month: String(currentDate.get('month') + 1).padStart(2, '0'),
         },
       })
 
