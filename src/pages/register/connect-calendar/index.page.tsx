@@ -12,7 +12,9 @@ export default function ConnectCalendar() {
   const router = useRouter()
 
   // !! => transforma algo em um Boolean
-  const hasAuthError = !!router.query.error
+  const hasAuthError = !!router.query?.error
+
+  console.log(hasAuthError)
 
   const isSignedIn = session.status === 'authenticated'
 

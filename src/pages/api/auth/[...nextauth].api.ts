@@ -21,7 +21,8 @@ export function buildNextAuthOptions(
             prompt: 'consent',
             access_type: 'offline',
             response_type: 'code',
-            scope: process.env.GOOGLE_SCOPE_USER,
+            scope:
+              'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar',
           },
         },
         // Busca somente os dados do usuário que queremos do Google
@@ -63,6 +64,6 @@ export function buildNextAuthOptions(
   }
 }
 
-export default async function Auth(req: NextApiRequest, res: NextApiResponse) {
-  return await NextAuth(req, res, buildNextAuthOptions(req, res))
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
+  return NextAuth(req, res, buildNextAuthOptions(req, res))
 }

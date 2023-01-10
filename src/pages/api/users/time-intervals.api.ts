@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { unstable_getServerSession as unstableGetServerSession } from 'next-auth/next'
+import { unstable_getServerSession as unstableGetServerSession } from 'next-auth'
 import { z } from 'zod'
 import { prisma } from '../../../lib/prisma'
 import { buildNextAuthOptions } from '../auth/[...nextauth].api'
@@ -42,7 +42,7 @@ export default async function handler(
           week_day: interval.weekDay,
           time_start_in_minutes: interval.startTimeInMinutes,
           time_end_in_minutes: interval.endTimeInMinutes,
-          user_id: session.user?.id,
+          user_id: session.user.id,
         },
       })
     }),

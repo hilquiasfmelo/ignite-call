@@ -37,8 +37,8 @@ export function PrismaAdapter(
         name: prismaUser.name,
         username: prismaUser.username,
         email: prismaUser.email!,
-        emailVerified: null,
         avatar_url: prismaUser.avatar_url!,
+        emailVerified: null,
       }
     },
 
@@ -58,8 +58,8 @@ export function PrismaAdapter(
         name: user.name,
         username: user.username,
         email: user.email!,
-        emailVerified: null,
         avatar_url: user.avatar_url!,
+        emailVerified: null,
       }
     },
 
@@ -80,8 +80,8 @@ export function PrismaAdapter(
         name: user.name,
         username: user.username,
         email: user.email!,
-        emailVerified: null,
         avatar_url: user.avatar_url!,
+        emailVerified: null,
       }
     },
 
@@ -108,8 +108,8 @@ export function PrismaAdapter(
         name: account.user.name,
         username: account.user.username,
         email: account.user.email!,
-        emailVerified: null,
         avatar_url: account.user.avatar_url!,
+        emailVerified: null,
       }
     },
 
@@ -130,8 +130,8 @@ export function PrismaAdapter(
         name: prismaUser.name,
         username: prismaUser.username,
         email: prismaUser.email!,
-        emailVerified: null,
         avatar_url: prismaUser.avatar_url!,
+        emailVerified: null,
       }
     },
 
@@ -170,7 +170,7 @@ export function PrismaAdapter(
     },
 
     async getSessionAndUser(sessionToken) {
-      const session = await prisma.session.findUnique({
+      const prismaSession = await prisma.session.findUnique({
         where: {
           session_token: sessionToken,
         },
@@ -179,9 +179,9 @@ export function PrismaAdapter(
         },
       })
 
-      if (!session) {
-        return null
-      }
+      if (!prismaSession) return null
+
+      const { user, ...session } = prismaSession
 
       return {
         session: {
@@ -190,12 +190,12 @@ export function PrismaAdapter(
           sessionToken: session.session_token,
         },
         user: {
-          id: session.user.id,
-          name: session.user.name,
-          username: session.user.username,
-          email: session.user.email!,
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          email: user.email!,
+          avatar_url: user.avatar_url!,
           emailVerified: null,
-          avatar_url: session.user.avatar_url!,
         },
       }
     },
@@ -225,8 +225,5 @@ export function PrismaAdapter(
         },
       })
     },
-
-    // async createVerificationToken({ identifier, expires, token }) {},
-    // async useVerificationToken({ identifier, token }) {},
   }
 }

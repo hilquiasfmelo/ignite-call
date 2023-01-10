@@ -31,7 +31,6 @@ export default function UpdateProfile() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { isSubmitting },
   } = useForm<UpdateProfileFormData>({
     resolver: zodResolver(updateProfileFormSchema),
@@ -44,9 +43,6 @@ export default function UpdateProfile() {
     await API.put('/users/update-profile', {
       bio: data.bio,
     })
-
-    // Reseta os valores do campo da bio
-    reset()
 
     await router.push(`/schedule/${session.data?.user.username}`)
   }
