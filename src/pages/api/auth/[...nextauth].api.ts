@@ -25,6 +25,9 @@ export function buildNextAuthOptions(
               'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar',
           },
         },
+        httpOptions: {
+          timeout: 40000,
+        },
         // Busca somente os dados do usuário que queremos do Google
         profile(profile: GoogleProfile) {
           return {

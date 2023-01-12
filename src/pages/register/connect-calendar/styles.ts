@@ -22,3 +22,20 @@ export const AuthError = styled(Text, {
   color: '#F75A68',
   marginBottom: '$4',
 })
+
+export const Auth = styled(Text, {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  color: '$gray200',
+  marginTop: '$4',
+  gap: '$2',
+
+  button: {
+    all: 'unset',
+    fontSize: '$md',
+    color: '$ignite300',
+    cursor: 'pointer',
+  },
+})

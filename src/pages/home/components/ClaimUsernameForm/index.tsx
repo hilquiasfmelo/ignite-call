@@ -6,6 +6,13 @@ import { useRouter } from 'next/router'
 import { Button, Text, TextInput } from '@ignite-ui/react'
 
 import { Form, FormAnnotation } from './styles'
+import { API } from '../../../../lib/axios'
+
+type RequestProsp = [
+  {
+    username: string
+  },
+]
 
 const claimUsernameFormSchema = z.object({
   username: z
@@ -31,10 +38,20 @@ export function ClaimUsernameForm() {
   // Redirects the user to the registration screen
   const router = useRouter()
 
-  async function handleClaimUsername(data: claimUsernameFormData) {
-    const { username } = data
+  async function handleClaimUsername(dataUser: claimUsernameFormData) {
+    const { username } = dataUser
 
-    await router.push(`/register?username=${username}`)
+    const { data } = await API.get<RequestProsp>('/users/get')
+
+    const user = data.filter((user) => user.username === username)
+
+    if (user.length <= 0) {
+      return await router.push(`/register/?username=${username}`)
+    } else {
+      alert('Usuário já cadastrado, conecte-se com o Google 🌎')
+
+      return await router.push(`/register/connect-calendar`)
+    }
   }
 
   return (

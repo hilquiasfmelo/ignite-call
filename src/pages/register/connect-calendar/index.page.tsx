@@ -1,9 +1,9 @@
 import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
 import { ArrowRight, Plugs, PlugsConnected } from 'phosphor-react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 import { Container, Header } from '../styles'
-import { AuthError, ConnectBox, ConnectItem } from './styles'
+import { Auth, AuthError, ConnectBox, ConnectItem } from './styles'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 
@@ -14,12 +14,18 @@ export default function ConnectCalendar() {
   // !! => transforma algo em um Boolean
   const hasAuthError = !!router.query?.error
 
-  console.log(hasAuthError)
-
   const isSignedIn = session.status === 'authenticated'
 
   async function handleConnectCalendar() {
     await signIn('google')
+  }
+
+  async function handleLogoutUser() {
+    signOut({
+      redirect: false,
+    }).then(() => {
+      router.push('/')
+    })
   }
 
   async function handleNavigateToNextStep() {
@@ -47,10 +53,12 @@ export default function ConnectCalendar() {
             <Text>Google Calendar</Text>
 
             {isSignedIn ? (
-              <Button size="sm" disabled>
-                Conectado
-                <PlugsConnected />
-              </Button>
+              <>
+                <Button size="sm" disabled>
+                  Conectado
+                  <PlugsConnected />
+                </Button>
+              </>
             ) : (
               <Button
                 type="submit"
@@ -82,6 +90,16 @@ export default function ConnectCalendar() {
             <ArrowRight />
           </Button>
         </ConnectBox>
+        {isSignedIn && (
+          <>
+            <Auth size="sm">
+              {`Olá ${session.data.user.name} deseja sair?`}
+              <strong>
+                <button onClick={handleLogoutUser}>Clique aqui</button>
+              </strong>
+            </Auth>
+          </>
+        )}
       </Container>
     </>
   )
