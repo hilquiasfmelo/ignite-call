@@ -24,6 +24,7 @@ export default function ConnectCalendar() {
     signOut({
       redirect: false,
     }).then(() => {
+      alert('Você foi deslogado, loga-se quando quiser 🚀')
       router.push('/')
     })
   }
